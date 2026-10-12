@@ -2,9 +2,16 @@
 import os
 
 from flask import Flask, render_template, request
+from werkzeug.exceptions import NotFound
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
 PASS_SCORE = 50  # минимальный средний балл для зачёта
+
+# Секретная ссылка: если задан URL_PREFIX, приложение доступно только по /<prefix>/, остальное — 404
+URL_PREFIX = os.environ.get("URL_PREFIX", "").strip("/")
+if URL_PREFIX:
+    app.wsgi_app = DispatcherMiddleware(NotFound(), {"/" + URL_PREFIX: app.wsgi_app})
 
 
 def calculate(test1, test2, exam):
