@@ -1,0 +1,6 @@
+run = "pip install -r requirements.txt && python main.py"
+entrypoint = "main.py"
+
+[[ports]]
+localPort = 8080
+externalPort = 80
